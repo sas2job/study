@@ -3,13 +3,13 @@ module Exercise
     class << self
       def find_max(array)
         max_value = 0
-        array.each{ |number| max_value = number if number > max_value }
+        array.each { |number| max_value = number if number > max_value }
         max_value
       end
 
       def replace(array)
         max_value = find_max(array)
-        array.map{ |number| number >= 0 ? number = max_value : number }
+        array.map { |element| element >= 0 ? max_value : element }
       end
 
       def search(array, query, first = 0, last = array.length - 1)
