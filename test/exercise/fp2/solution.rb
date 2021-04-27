@@ -16,26 +16,26 @@ module Exercise
       end
 
       # Написать свою функцию my_map
-      def my_map
+      def my_map(&block)
         new_array = MyArray.new
-        my_each { |item| new_array << yield(item) }
-        new_array
+        function = ->(acc, element) { acc << block.call(element) }
+        MyArray.new(my_reduce(new_array, &function))
       end
 
       # Написать свою функцию my_compact
       def my_compact
-        new_array = MyArray.new
-        my_each { |item| new_array << item unless item.nil? }
-        new_array
+        my_reduce(MyArray.new) do |acc, item|
+          item.nil? ? acc : acc << item
+        end
       end
 
       # Написать свою функцию my_reduce
-      def my_reduce(initial = nil)
-        acc = initial
-        my_each do |item|
-          acc = acc.nil? ? item : yield(acc, item)
-        end
-        acc
+      def my_reduce(acc = nil, &block)
+        return acc if empty?
+
+        first, *rest = self
+        acc = acc.nil? ? first : block.call(acc, first)
+        MyArray.new(rest).my_reduce(acc, &block)
       end
     end
   end
